@@ -8,10 +8,47 @@ export type GiftProduct = {
   tags: string[];
 };
 
+export type BasketType = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+};
+
+export type IndividualItem = {
+  id: string;
+  name: string;
+  price: number;
+  category: 'Banho & Corpo' | 'Maquiagem' | 'Acessórios' | 'Afetivos';
+};
+
+export const basketTypes: BasketType[] = [
+  { id: 'caixa-premium', name: 'Caixa Presente Premium', price: 25.0, image: '/images/caixa-premium.jpg', description: 'Caixa rígida com laço de cetim e papel seda.' },
+  { id: 'cesta-vime', name: 'Cesta de Vime Clássica', price: 45.0, image: '/images/cesta-vime.jpg', description: 'Cesta tradicional decorada com flores secas e laço.' },
+  { id: 'bandeja-madeira', name: 'Bandeja Rústica', price: 60.0, image: '/images/bandeja-madeira.jpg', description: 'Bandeja de madeira reutilizável com acabamento fino.' },
+];
+
+export const individualItems: IndividualItem[] = [
+  { id: 'i-1', name: 'Body Splash Cuide-se Bem (200ml)', price: 69.90, category: 'Banho & Corpo' },
+  { id: 'i-2', name: 'Loção Hidratante Nativa SPA (400ml)', price: 74.90, category: 'Banho & Corpo' },
+  { id: 'i-3', name: 'Perfume Eudora Kiss Me More', price: 119.90, category: 'Banho & Corpo' },
+  { id: 'i-4', name: 'Creme para as Mãos', price: 29.90, category: 'Banho & Corpo' },
+  { id: 'i-5', name: 'Gloss Labial com Chaveiro', price: 35.00, category: 'Maquiagem' },
+  { id: 'i-6', name: 'Kit 4 Pincéis Profissionais', price: 55.00, category: 'Maquiagem' },
+  { id: 'i-7', name: 'Lenço Umedecido Demaquilante', price: 15.00, category: 'Maquiagem' },
+  { id: 'i-8', name: 'Relógio Feminino Minimalista', price: 89.90, category: 'Acessórios' },
+  { id: 'i-9', name: 'Conjunto 2 Pares de Brincos', price: 45.00, category: 'Acessórios' },
+  { id: 'i-10', name: 'Pulseira Delicada', price: 35.00, category: 'Acessórios' },
+  { id: 'i-11', name: 'Caneca Porcelana "Gratidão"', price: 45.00, category: 'Afetivos' },
+  { id: 'i-12', name: 'Cartão com Mensagem Escrita à Mão', price: 15.00, category: 'Afetivos' },
+  { id: 'i-13', name: 'Coração de Pelúcia Fofo', price: 25.00, category: 'Afetivos' },
+];
+
 export const giftProducts: GiftProduct[] = [
   {
     id: 'cesta-gratidao',
-    name: 'Cesta Beauty Gratidão (Cuide-se Bem)',
+    name: 'Cesta Beauty Gratidão',
     price: 198.90,
     description: 'Um presente delicado e especial, perfeito para surpreender quem você ama com carinho e cuidado.',
     items: [
@@ -26,7 +63,7 @@ export const giftProducts: GiftProduct[] = [
   },
   {
     id: 'kit-linda-sexta',
-    name: 'Kit Skincare Linda Sexta',
+    name: 'Coleção Linda Sexta',
     price: 120.00,
     description: 'Um presente delicado e especial para surpreender quem você ama! 💕',
     items: [
@@ -55,7 +92,7 @@ export const giftProducts: GiftProduct[] = [
   },
   {
     id: 'kit-mae',
-    name: 'Kit Especial Amor de Mãe (Eudora)',
+    name: 'Coleção Amor de Mãe',
     price: 94.80,
     description: 'Um carinho preparado para deixar o dia dela ainda mais especial! 🌷',
     items: [
@@ -63,11 +100,11 @@ export const giftProducts: GiftProduct[] = [
       '01 hidratante corporal Eudora 400 ml'
     ],
     image: '/images/kit-mae.jpg',
-    tags: ['Eudora', 'Mães']
+    tags: ['Eudora', 'Afetivo']
   },
   {
     id: 'cesta-ameixa',
-    name: 'Cesta Spa Nativa SPA Ameixa',
+    name: 'Cesta Spa Nativa Ameixa',
     price: 127.89,
     description: 'Um presente delicado e especial para surpreender quem você ama!',
     items: [
@@ -80,7 +117,7 @@ export const giftProducts: GiftProduct[] = [
   },
   {
     id: 'kit-kiss-me-more',
-    name: 'Kit Perfumaria Kiss Me More (Eudora)',
+    name: 'Coleção Kiss Me More',
     price: 189.80,
     description: 'Um presente lindo e especial para surpreender quem você ama! 💖',
     items: [
@@ -94,7 +131,7 @@ export const giftProducts: GiftProduct[] = [
   },
   {
     id: 'kit-floratta-red',
-    name: 'Kit Presente Floratta Red Essencial',
+    name: 'Coleção Floratta Red',
     price: 93.80,
     description: 'Uma combinação linda e delicada para surpreender quem você ama! ❤️',
     items: [
@@ -107,7 +144,7 @@ export const giftProducts: GiftProduct[] = [
   },
   {
     id: 'cesta-deleite',
-    name: 'Cesta Especial Cuide-se Bem Deleite',
+    name: 'Cesta Afetiva Deleite',
     price: 148.80,
     description: 'Uma linda opção para presentear com carinho e delicadeza! 🎁✨',
     items: [
@@ -123,7 +160,7 @@ export const giftProducts: GiftProduct[] = [
   },
   {
     id: 'kit-cuide-se-bem',
-    name: 'Kit Hidratação Cuide-se Bem',
+    name: 'Coleção Essencial Cuide-se',
     price: 120.00,
     description: 'Uma linda opção para presentear alguém especial! 💕',
     items: [
@@ -137,7 +174,7 @@ export const giftProducts: GiftProduct[] = [
   },
   {
     id: 'kit-amor-elegancia',
-    name: 'Kit Premium Amor & Elegância (Com Acessórios)',
+    name: 'Cesta Premium Amor & Elegância',
     price: 168.90,
     description: 'Uma linda combinação para surpreender quem você ama!',
     items: [

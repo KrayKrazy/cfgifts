@@ -1,1 +1,46 @@
-generator client {`n  provider = "prisma-client-js"`n}`n`ndatasource db {`n  provider = "postgresql"`n  url      = env("DATABASE_URL")`n}`n`nmodel CFGiftCustomer {`n  id          String   @id @default(uuid())`n  name        String`n  email       String   @unique`n  phone       String`n  docType     String   // cpf ou cnpj`n  docNumber   String`n  fingerprint String?`n  createdAt   DateTime @default(now())`n  orders      CFGiftOrder[]`n}`n`nmodel CFGiftOrder {`n  id                 String   @id @default(uuid())`n  customerId         String`n  customer           CFGiftCustomer @relation(fields: [customerId], references: [id])`n  status             String   // PENDING_PAYMENT, PAID, CANCELLED`n  paymentMethod      String   // credit_card, pix`n  subtotal           Float`n  shipping_price     Float`n  total              Float`n  installments       Int      @default(1)`n  shipping_mode      String`n  cep_destino        String`n  address_street     String?`n  address_number     String?`n  address_complement String?`n  address_district   String?`n  address_city       String?`n  address_state      String?`n  carrier            String?`n  idempotency_key    String?  @unique`n  cakto_order_id     String?`n  cakto_checkout_url String?`n  cakto_ref          String?`n  createdAt          DateTime @default(now())`n}
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CFGiftCustomer {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  phone       String
+  docType     String   // cpf ou cnpj
+  docNumber   String
+  fingerprint String?
+  createdAt   DateTime @default(now())
+  orders      CFGiftOrder[]
+}
+
+model CFGiftOrder {
+  id                 String   @id @default(uuid())
+  customerId         String
+  customer           CFGiftCustomer @relation(fields: [customerId], references: [id])
+  status             String   // PENDING_PAYMENT, PAID, CANCELLED
+  paymentMethod      String   // credit_card, pix
+  subtotal           Float
+  shipping_price     Float
+  total              Float
+  installments       Int      @default(1)
+  shipping_mode      String
+  cep_destino        String
+  address_street     String?
+  address_number     String?
+  address_complement String?
+  address_district   String?
+  address_city       String?
+  address_state      String?
+  carrier            String?
+  idempotency_key    String?  @unique
+  cakto_order_id     String?
+  cakto_checkout_url String?
+  cakto_ref          String?
+  createdAt          DateTime @default(now())
+}

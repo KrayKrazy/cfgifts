@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
+import CheckoutModal from './components/CheckoutModal';
 import { giftProducts, GiftProduct, basketTypes, individualItems, BasketType, IndividualItem } from '../data/products';
 
 export default function Home() {
@@ -32,7 +33,9 @@ export default function Home() {
     );
   };
 
-  const buyOnWhatsApp = () => {
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const buyOnWhatsApp = () => { setIsCheckingOut(true); };
+  const buyOnWhatsApp_old = () => {
     const phone = "5511999999999"; // Replace with actual phone
     let text = '';
 
@@ -294,18 +297,28 @@ export default function Home() {
 
                   <div className="mt-10 flex justify-between items-center border-t border-slate-100 pt-6">
                     <button onClick={() => setCustomStep(2)} className="text-slate-500 font-bold hover:text-slate-900">← Editar Itens</button>
-                    <button onClick={buyOnWhatsApp} className="bg-rose-600 text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-rose-700 hover:shadow-xl hover:-translate-y-1 transition-all flex gap-2 items-center">
-                      Finalizar no WhatsApp 💬
-                    </button>
-                  </div>
-                </div>
-              )}
-
+                <button onClick={buyOnWhatsApp} className="bg-rose-600 text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-rose-700 hover:shadow-xl hover:-translate-y-1 transition-all flex gap-2 items-center">
+                  Finalizar no Checkout 💳
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          )}
 
+        </div>
+      </div>
     </div>
+  )}
+
+  {isCheckingOut && (
+    <CheckoutModal 
+      activeProduct={activeProduct}
+      isCustom={isBuildingCustom}
+      selectedBasket={selectedBasket}
+      selectedItems={selectedItems}
+      customMessage={customMessage}
+      onClose={() => setIsCheckingOut(false)}
+    />
+  )}
+</div>
   );
 }

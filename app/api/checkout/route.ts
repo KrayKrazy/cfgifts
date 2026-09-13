@@ -1,1 +1,50 @@
-import { NextResponse } from "next/server";`nimport { PrismaClient } from "@prisma/client";`n`nconst prisma = new PrismaClient();`n`nexport async function POST(req: Request) {`n  try {`n    const body = await req.json();`n    const { `n      name, email, phone, docNumber, items, total, shipping, `n      paymentMethod, installments, card `n    } = body;`n`n    const CAKTO_BASE_URL = process.env.CAKTO_BASE_URL ?? "https://api.cakto.com.br";`n    const CAKTO_CLIENT_ID = process.env.CAKTO_CLIENT_ID;`n    const CAKTO_SECRET = process.env.CAKTO_SECRET;`n`n    if (!CAKTO_CLIENT_ID || !CAKTO_SECRET) {`n      return NextResponse.json({ error: "Gateway de Pagamento nuo configurado corretamente." }, { status: 500 });`n    }`n`n    // 1. Obter Cliente no Banco (Upsert)`n    const customer = await prisma.cFGiftCustomer.upsert({`n      where: { email },`n      update: { name, phone, docNumber: docNumber || "" },`n      create: {`n        name, email, phone,`n        docType: (docNumber || "").length > 14 ? "cnpj" : "cpf",`n        docNumber: docNumber || "",`n        fingerprint: "web_checkout_flow"`n      }`n    });`n`n    const idempotencyKey = crypto.randomUUID();`n`n    // 2. Criar Pedido PENDENTE no Banco (Prisma)`n    const order = await prisma.cFGiftOrder.create({`n      data: {`n        customerId: customer.id,`n        status: "PENDING_PAYMENT",`n        paymentMethod: paymentMethod === "credit_card" ? "credit_card" : "pix",`n        subtotal: items.reduce((acc: number, i: any) => acc + i.price, 0),`n        shipping_price: shipping.price,`n        total: total,`n        installments: installments || 1,`n        shipping_mode: shipping.service || "FRETE_CALCULADO",`n        cep_destino: shipping.cep || "00000000",`n        address_street: body.address?.street,`n        address_number: body.address?.number,`n        address_complement: body.address?.complement,`n        address_district: body.address?.neighborhood,`n        address_city: body.address?.city,`n        address_state: body.address?.state,`n        carrier: shipping.carrier,`n        idempotency_key: idempotencyKey,`n      }`n    });`n`n    // 3. Obter Token do Cakto`n    const tokenRes = await fetch(`${CAKTO_BASE_URL}/public_api/token/`, {`n      method: "POST",`n      headers: { "Content-Type": "application/json" },`n      body: JSON.stringify({ client_id: CAKTO_CLIENT_ID, client_secret: CAKTO_SECRET }),`n    });`n    `n    if (!tokenRes.ok) throw new Error("Falha de Autentica��o com Cakto");`n    const { access_token: token } = await tokenRes.json();`n`n    // 4. Montar Payload para o Cakto`n    const caktoPayload: any = {`n      paymentMethod: paymentMethod,`n      customer: {`n        name, email, phone,`n        docType: (docNumber || "").length > 14 ? "cnpj" : "cpf",`n        docNumber: (docNumber || "").replace(/\D/g, "")`n      },`n      items: items.map((item: any) => ({`n        offerId: item.offerId || "offer_default_123", `n        quantity: 1,`n        customPrice: Math.round(item.price * 100),`n        description: item.name`n      })),`n      metadata: {`n        orderId: order.id`n      }`n    };`n`n    if (paymentMethod === "pix") {`n      caktoPayload.pixExpiresIn = 3600;`n    } else if (paymentMethod === "credit_card") {`n      caktoPayload.installments = installments || 1;`n      caktoPayload.card = {`n        number: card.number.replace(/\D/g, ""),`n        holderName: card.holderName,`n        expirationMonth: card.expMonth,`n        expirationYear: card.expYear,`n        cvv: card.cvv`n      };`n    }`n`n    // 5. Enviar para Cakto`n    const caktoRes = await fetch(`${CAKTO_BASE_URL}/public_api/payments/`, {`n      method: "POST",`n      headers: {`n        "Authorization": `Bearer ${token}`,`n        "Content-Type": "application/json",`n        "X-Idempotency-Key": idempotencyKey`n      },`n      body: JSON.stringify(caktoPayload),`n    });`n`n    const paymentData = await caktoRes.json();`n`n    if (!caktoRes.ok) {`n      console.error("Cakto Payment Error:", paymentData);`n      await prisma.cFGiftOrder.update({`n        where: { id: order.id },`n        data: { status: "CANCELLED", cakto_ref: paymentData.error || "Gateway Error" }`n      });`n      return NextResponse.json({ error: "Pagamento recusado pelo processador." }, { status: 400 });`n    }`n`n    // 6. Atualizar Pedido com dados do gateway`n    await prisma.cFGiftOrder.update({`n      where: { id: order.id },`n      data: {`n        cakto_order_id: paymentData.id,`n        cakto_checkout_url: paymentData.checkout_url`n      }`n    });`n`n    if (paymentMethod === "pix") {`n      return NextResponse.json({`n        success: true,`n        orderId: order.id,`n        pixCode: paymentData.pix_emv,`n        qrCodeUrl: paymentData.pix_qrcode_url`n      });`n    } else {`n      return NextResponse.json({`n        success: true,`n        orderId: order.id,`n        status: paymentData.status`n      });`n    }`n  } catch (error: any) {`n    console.error("Checkout Endpoint Error:", error.message);`n    return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });`n  }`n}
+﻿import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { name, email, phone, docNumber, items, total, shipping, paymentMethod, installments, card } = body;
+    const CAKTO_BASE_URL = process.env.CAKTO_BASE_URL ?? "https://api.cakto.com.br";
+    const CAKTO_CLIENT_ID = process.env.CAKTO_CLIENT_ID;
+    const CAKTO_SECRET = process.env.CAKTO_SECRET;
+    if (!CAKTO_CLIENT_ID || !CAKTO_SECRET) return NextResponse.json({ error: "Gateway de Pagamento nuo configurado corretamente." }, { status: 500 });
+    const customer = await prisma.cFGiftCustomer.upsert({
+      where: { email },
+      update: { name, phone, docNumber: docNumber || "" },
+      create: { name, email, phone, docType: (docNumber || "").length > 14 ? "cnpj" : "cpf", docNumber: docNumber || "", fingerprint: "web_checkout_flow" }
+    });
+    const idempotencyKey = crypto.randomUUID();
+    const order = await prisma.cFGiftOrder.create({
+      data: {
+        customerId: customer.id, status: "PENDING_PAYMENT", paymentMethod: paymentMethod === "credit_card" ? "credit_card" : "pix",
+        subtotal: items.reduce((acc: number, i: any) => acc + i.price, 0), shipping_price: shipping.price, total: total, installments: installments || 1,
+        shipping_mode: shipping.service || "FRETE_CALCULADO", cep_destino: shipping.cep || "00000000", address_street: body.address?.street, address_number: body.address?.number,
+        address_complement: body.address?.complement, address_district: body.address?.neighborhood, address_city: body.address?.city, address_state: body.address?.state, carrier: shipping.carrier, idempotency_key: idempotencyKey,
+      }
+    });
+    const tokenRes = await fetch(`${CAKTO_BASE_URL}/public_api/token/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ client_id: CAKTO_CLIENT_ID, client_secret: CAKTO_SECRET }) });
+    if (!tokenRes.ok) throw new Error("Falha de Autenticaï¿½ï¿½o com Cakto");
+    const { access_token: token } = await tokenRes.json();
+    const caktoPayload: any = {
+      paymentMethod: paymentMethod,
+      customer: { name, email, phone, docType: (docNumber || "").length > 14 ? "cnpj" : "cpf", docNumber: (docNumber || "").replace(/\D/g, "") },
+      items: items.map((item: any) => ({ offerId: item.offerId || "offer_default_123", quantity: 1, customPrice: Math.round(item.price * 100), description: item.name })),
+      metadata: { orderId: order.id }
+    };
+    if (paymentMethod === "pix") { caktoPayload.pixExpiresIn = 3600; } 
+    else if (paymentMethod === "credit_card") {
+      caktoPayload.installments = installments || 1;
+      caktoPayload.card = { number: card.number.replace(/\D/g, ""), holderName: card.holderName, expirationMonth: card.expMonth, expirationYear: card.expYear, cvv: card.cvv };
+    }
+    const caktoRes = await fetch(`${CAKTO_BASE_URL}/public_api/payments/`, { method: "POST", headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", "X-Idempotency-Key": idempotencyKey }, body: JSON.stringify(caktoPayload) });
+    const paymentData = await caktoRes.json();
+    if (!caktoRes.ok) {
+      await prisma.cFGiftOrder.update({ where: { id: order.id }, data: { status: "CANCELLED", cakto_ref: paymentData.error || "Gateway Error" } });
+      return NextResponse.json({ error: "Pagamento recusado pelo processador." }, { status: 400 });
+    }
+    await prisma.cFGiftOrder.update({ where: { id: order.id }, data: { cakto_order_id: paymentData.id, cakto_checkout_url: paymentData.checkout_url } });
+    if (paymentMethod === "pix") return NextResponse.json({ success: true, orderId: order.id, pixCode: paymentData.pix_emv, qrCodeUrl: paymentData.pix_qrcode_url });
+    else return NextResponse.json({ success: true, orderId: order.id, status: paymentData.status });
+  } catch (error: any) { return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 }); }
+}

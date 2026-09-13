@@ -35,14 +35,12 @@ export default function CheckoutModal({ activeProduct, isCustom, selectedBasket,
     if (shipping.cep.replace(/\D/g, '').length !== 8) return;
     setIsLoading(true);
     try {
-      // ViaCEP
-      const res = await fetch(https://viacep.com.br/ws/ + shipping.cep.replace(/\D/g, '') + /json/);
+      const res = await fetch("https://viacep.com.br/ws/" + shipping.cep.replace(/\D/g, '') + "/json/");
       const data = await res.json();
       if (!data.erro) {
         setShipping(s => ({ ...s, street: data.logradouro, neighborhood: data.bairro, city: data.localidade, state: data.uf }));
       }
       
-      // Frenet
       const freteRes = await fetch('/api/frete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,15 +95,15 @@ export default function CheckoutModal({ activeProduct, isCustom, selectedBasket,
 
       if (data.success && payment.method === 'pix') {
         setPixData({ pixCode: data.pixCode, qrCodeUrl: data.qrCodeUrl });
-        setStep(4); // Pix Screen
+        setStep(4);
       } else if (data.success) {
-        alert("Pagamento Aprovado com Sucesso! ??");
+        alert("Pagamento Aprovado com Sucesso! ðŸ’–");
         onClose();
       } else {
         alert(data.error || "Erro ao processar pagamento.");
       }
     } catch (e) {
-      alert("Erro na comunicação com o servidor.");
+      alert("Erro na comunicaÃ§Ã£o com o servidor.");
     }
     setIsLoading(false);
   };
@@ -115,7 +113,7 @@ export default function CheckoutModal({ activeProduct, isCustom, selectedBasket,
       <div className="bg-white w-full max-w-2xl md:rounded-3xl shadow-2xl h-full md:h-[90vh] flex flex-col overflow-hidden relative">
         <header className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-rose-50">
           <h2 className="font-serif text-xl font-bold text-rose-700">Finalizar Compra Segura</h2>
-          <button onClick={onClose} className="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-rose-600 hover:text-white transition-colors">?</button>
+          <button onClick={onClose} className="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-rose-600 hover:text-white transition-colors">âœ•</button>
         </header>
         
         <div className="flex-1 overflow-y-auto p-6 md:p-8">
@@ -133,24 +131,24 @@ export default function CheckoutModal({ activeProduct, isCustom, selectedBasket,
 
           {step === 2 && (
             <div className="space-y-4 animate-slideUp">
-              <h3 className="font-bold text-lg text-slate-800 border-b pb-2">2. Endereço de Entrega</h3>
+              <h3 className="font-bold text-lg text-slate-800 border-b pb-2">2. EndereÃ§o de Entrega</h3>
               <div className="flex gap-2">
                 <input type="text" placeholder="CEP" className="flex-1 p-3 border rounded-xl" value={shipping.cep} onChange={e => setShipping({...shipping, cep: e.target.value})} onBlur={handleCepSearch} />
               </div>
               <div className="grid grid-cols-4 gap-2">
                 <input type="text" placeholder="Rua" className="col-span-3 p-3 border rounded-xl" value={shipping.street} onChange={e => setShipping({...shipping, street: e.target.value})} />
-                <input type="text" placeholder="Nº" className="col-span-1 p-3 border rounded-xl" value={shipping.number} onChange={e => setShipping({...shipping, number: e.target.value})} />
+                <input type="text" placeholder="NÂº" className="col-span-1 p-3 border rounded-xl" value={shipping.number} onChange={e => setShipping({...shipping, number: e.target.value})} />
               </div>
               
               {shippingOptions.length > 0 && (
                 <div className="mt-4 p-4 bg-slate-50 border rounded-xl space-y-2">
-                  <h4 className="font-bold text-sm text-slate-700 mb-2">Opções de Frete (Frenet)</h4>
+                  <h4 className="font-bold text-sm text-slate-700 mb-2">OpÃ§Ãµes de Frete (Frenet)</h4>
                   {shippingOptions.map((opt, i) => (
                     <label key={i} className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer bg-white hover:border-rose-300">
                       <input type="radio" name="frete" onChange={() => setShipping({...shipping, price: opt.price, service: opt.service})} />
                       <div className="flex-1">
                         <span className="block font-bold text-sm">{opt.service}</span>
-                        <span className="block text-xs text-slate-500">{opt.days} dias úteis</span>
+                        <span className="block text-xs text-slate-500">{opt.days} dias Ãºteis</span>
                       </div>
                       <span className="font-bold text-rose-600">{fmt(opt.price)}</span>
                     </label>
@@ -170,19 +168,19 @@ export default function CheckoutModal({ activeProduct, isCustom, selectedBasket,
               <h3 className="font-bold text-lg text-slate-800 border-b pb-2">3. Pagamento</h3>
               
               <div className="flex gap-4 mb-4">
-                <label className={lex-1 p-4 border rounded-xl cursor-pointer text-center font-bold }>
+                <label className={`flex-1 p-4 border rounded-xl cursor-pointer text-center font-bold ${payment.method === 'pix' ? 'bg-rose-50 border-rose-500 text-rose-700' : 'bg-white text-slate-600'}`}>
                   <input type="radio" className="hidden" checked={payment.method === 'pix'} onChange={() => setPayment({...payment, method: 'pix'})} />
-                  PIX (Aprovação Imediata)
+                  PIX (AprovaÃ§Ã£o Imediata)
                 </label>
-                <label className={lex-1 p-4 border rounded-xl cursor-pointer text-center font-bold }>
+                <label className={`flex-1 p-4 border rounded-xl cursor-pointer text-center font-bold ${payment.method === 'credit_card' ? 'bg-rose-50 border-rose-500 text-rose-700' : 'bg-white text-slate-600'}`}>
                   <input type="radio" className="hidden" checked={payment.method === 'credit_card'} onChange={() => setPayment({...payment, method: 'credit_card'})} />
-                  Cartão de Crédito
+                  CartÃ£o de CrÃ©dito
                 </label>
               </div>
 
               {payment.method === 'credit_card' && (
                 <div className="space-y-3 bg-slate-50 p-4 border rounded-xl">
-                  <input type="text" placeholder="Número do Cartão" className="w-full p-3 border rounded-lg" value={payment.cardNumber} onChange={e => setPayment({...payment, cardNumber: e.target.value})} />
+                  <input type="text" placeholder="NÃºmero do CartÃ£o" className="w-full p-3 border rounded-lg" value={payment.cardNumber} onChange={e => setPayment({...payment, cardNumber: e.target.value})} />
                   <input type="text" placeholder="Nome Impresso" className="w-full p-3 border rounded-lg" value={payment.cardName} onChange={e => setPayment({...payment, cardName: e.target.value})} />
                   <div className="flex gap-2">
                     <input type="text" placeholder="MM/AA" className="w-1/2 p-3 border rounded-lg" value={payment.cardExpiry} onChange={e => setPayment({...payment, cardExpiry: e.target.value})} />
@@ -219,10 +217,10 @@ export default function CheckoutModal({ activeProduct, isCustom, selectedBasket,
                 <img src={pixData.qrCodeUrl} alt="QR Code PIX" className="w-64 h-64 border rounded-2xl shadow-lg p-2" />
               </div>
               <div>
-                <p className="text-xs text-slate-400 mb-2">Ou copie o código (Pix Copia e Cola):</p>
+                <p className="text-xs text-slate-400 mb-2">Ou copie o cÃ³digo (Pix Copia e Cola):</p>
                 <input type="text" readOnly value={pixData.pixCode} className="w-full p-3 text-xs border rounded-lg bg-slate-50 text-center" />
               </div>
-              <button onClick={() => { navigator.clipboard.writeText(pixData.pixCode); alert('Copiado!'); }} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-black">Copiar Código</button>
+              <button onClick={() => { navigator.clipboard.writeText(pixData.pixCode); alert('Copiado!'); }} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-black">Copiar CÃ³digo</button>
             </div>
           )}
 

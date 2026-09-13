@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Playfair_Display, Lato } from "next/font/google";
 import "./globals.css";
 
@@ -15,7 +15,7 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   title: "CFgifts | Cestas e Presentes Especiais",
-  description: "Presentes especiais e kits de beleza para surpreender quem você ama. Entregamos carinho em forma de presente.",
+  description: "Presentes especiais e kits de beleza para surpreender quem vocÃª ama. Entregamos carinho em forma de presente.",
 };
 
 export default function RootLayout({

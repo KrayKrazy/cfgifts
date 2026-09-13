@@ -1,1 +1,20 @@
-import { NextResponse } from "next/server";`nimport { PrismaClient } from "@prisma/client";`nimport crypto from "crypto";`n`nconst prisma = new PrismaClient();`n`nexport async function POST(req: Request) {`n  try {`n    const payload = await req.text();`n    const signature = req.headers.get("x-cakto-signature");`n    const CAKTO_WEBHOOK_SECRET = process.env.CAKTO_WEBHOOK_SECRET;`n`n    if (!CAKTO_WEBHOOK_SECRET || !signature) {`n      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });`n    }`n`n    // Validar assinatura (depende de como o Cakto envia o webhook, assumindo HMAC SHA256)`n    const expectedSignature = crypto.createHmac("sha256", CAKTO_WEBHOOK_SECRET).update(payload).digest("hex");`n    if (expectedSignature !== signature) {`n       // Apenas aviso no log em dev, em prod deve retornar erro: `n       // return NextResponse.json({ error: "Invalid signature" }, { status: 401 });`n       console.warn("Invalid signature from Cakto, proceeding anyway for dev");`n    }`n`n    const event = JSON.parse(payload);`n`n    if (event.event === "payment.approved" || event.event === "payment.paid") {`n      const orderId = event.data?.metadata?.orderId;`n      if (orderId) {`n        await prisma.cFGiftOrder.update({`n          where: { id: orderId },`n          data: { status: "PAID" }`n        });`n      }`n    }`n`n    return NextResponse.json({ received: true });`n  } catch (error) {`n    console.error("Webhook error:", error);`n    return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });`n  }`n}
+﻿import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import crypto from "crypto";
+const prisma = new PrismaClient();
+export async function POST(req: Request) {
+  try {
+    const payload = await req.text();
+    const signature = req.headers.get("x-cakto-signature");
+    const CAKTO_WEBHOOK_SECRET = process.env.CAKTO_WEBHOOK_SECRET;
+    if (!CAKTO_WEBHOOK_SECRET || !signature) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const expectedSignature = crypto.createHmac("sha256", CAKTO_WEBHOOK_SECRET).update(payload).digest("hex");
+    if (expectedSignature !== signature) console.warn("Invalid signature from Cakto, proceeding anyway for dev");
+    const event = JSON.parse(payload);
+    if (event.event === "payment.approved" || event.event === "payment.paid") {
+      const orderId = event.data?.metadata?.orderId;
+      if (orderId) await prisma.cFGiftOrder.update({ where: { id: orderId }, data: { status: "PAID" } });
+    }
+    return NextResponse.json({ received: true });
+  } catch (error) { return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 }); }
+}

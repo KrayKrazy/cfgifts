@@ -62,45 +62,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen text-slate-800 pb-24">
-      {/* HEADER */}
-      <header className="bg-white border-b border-rose-100 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 relative rounded-full overflow-hidden border border-rose-100">
-              <Image src="/images/logo.jpg" alt="CFgifts Logo" fill className="object-cover" />
-            </div>
-            <h1 className="font-serif text-2xl font-bold text-rose-600 tracking-tight">CFgifts</h1>
-          </div>
-          <nav className="hidden md:flex gap-6">
-            <button className="text-sm font-medium text-slate-500 hover:text-rose-600 transition-colors">Kits Prontos</button>
-            <button onClick={() => setIsBuildingCustom(true)} className="text-sm font-bold text-rose-600 hover:text-rose-700 transition-colors">Monte a Sua</button>
-          </nav>
-        </div>
-      </header>
-
-      {/* HERO SECTION */}
-      <section className="bg-rose-50 border-b border-rose-100 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col items-center text-center relative z-10 animate-slideUp">
-          <span className="text-xs font-bold uppercase tracking-widest text-rose-500 mb-4">Eternize Momentos</span>
-          <h2 className="font-serif text-4xl md:text-6xl font-bold text-slate-900 mb-6 max-w-3xl leading-tight">
-            Surpreenda com um <i className="text-rose-600">presente único.</i>
-          </h2>
-          <p className="text-slate-600 max-w-xl md:text-lg mb-10">
-            Escolha uma de nossas coleções exclusivas prontas para emocionar, ou monte uma cesta do zero escolhendo cada detalhe.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a href="#catalogo" className="bg-white text-rose-600 border border-rose-200 px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-rose-50 transition-all duration-300">
-              Ver Coleções
-            </a>
-            <button onClick={() => setIsBuildingCustom(true)} className="bg-rose-600 text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-rose-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              Montar Cesta Personalizada ✨
-            </button>
-          </div>
-        </div>
-        <div className="absolute top-0 left-0 w-64 h-64 bg-rose-200 rounded-full blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-rose-300 rounded-full blur-3xl opacity-20 translate-x-1/3 translate-y-1/3"></div>
-      </section>
+      {/* HERO SECTION IMPORTED FROM 21st.dev */}
+      <div className="mb-12">
+        <CommerceHero />
+      </div>
 
       {/* CATALOGO - COLEÇÕES PRONTAS */}
       <main id="catalogo" className="max-w-7xl mx-auto px-6 pt-20">

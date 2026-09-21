@@ -1,4 +1,5 @@
 "use client";
+import { CommerceHero } from '@/components/ui/commerce-hero';
 import { useState } from 'react';
 import Image from 'next/image';
 import CheckoutModal from './components/CheckoutModal';
@@ -287,3 +288,4 @@ export default function Home() {
     </div>
   );
 }
+

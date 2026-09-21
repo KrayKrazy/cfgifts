@@ -65,7 +65,7 @@ export default function Home() {
     <div className="min-h-screen text-slate-800 pb-24">
       {/* HERO SECTION IMPORTED FROM 21st.dev */}
       <div className="mb-12">
-        <CommerceHero />
+        <CommerceHero onBuildCustom={() => setIsBuildingCustom(true)} />
       </div>
 
       {/* CATALOGO - COLEÇÕES PRONTAS */}

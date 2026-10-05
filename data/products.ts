@@ -189,6 +189,96 @@ export const giftProducts: GiftProduct[] = [
     tags: ['O Boticário', 'Acessórios']
   },
   {
+    id: 'nectar-d-amour',
+    name: 'Néctar D\'Amour',
+    price: 13.20,
+    description: 'O doce sabor de uma nova união. Nosso mel silvestre artesanal vem envasado em um delicado pote de vidro selado com cera em relevo, finalizado com flores secas e colher de pau.',
+    items: ['Mel silvestre artesanal em pote de vidro', 'Selagem em cera com relevo', 'Flores secas', 'Colher de pau'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.06.jpeg',
+    tags: ['Casamento', 'Lembrancinhas']
+  },
+  {
+    id: 'brotos-de-afeto',
+    name: 'Brotos de Afeto no Kraft',
+    price: 7.43,
+    description: 'Uma suculenta vibrante e cheia de vida, cuidadosamente embalada em papel kraft em formato de buquê, amarrada com um charmoso laço de sisal. Perfeita para casamentos Boho Chic.',
+    items: ['Muda de suculenta', 'Embalagem buquê em kraft', 'Laço de sisal'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.07 (1).jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Planta']
+  },
+  {
+    id: 'jardim-de-gratidao',
+    name: 'Jardim de Gratidão',
+    price: 8.25,
+    description: 'Suculentas cultivadas com cuidado e apresentadas em um resistente cachepô de papel pardo ecológico, impresso com a frase romântica do casal. O amor precisa ser cultivado todos os dias.',
+    items: ['Muda de suculenta', 'Cachepô ecológico com impressão personalizada'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.07 (2).jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Planta']
+  },
+  {
+    id: 'par-perfeito',
+    name: 'Par Perfeito Botanique',
+    price: 19.80,
+    description: 'Duas lindas mudas de echeveria dispostas lado a lado, representando os noivos, envoltas em uma malha rústica de juta e finalizadas com um glamuroso laço de cetim rosa e tag de coração.',
+    items: ['2 Mudas de echeveria', 'Malha rústica de juta', 'Laço de cetim e tag'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.07 (3).jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Planta']
+  },
+  {
+    id: 'brinde-a-vida',
+    name: 'Brinde à Vida',
+    price: 247.50,
+    description: 'A sofisticação em sua forma mais pura. Uma charmosa mini garrafa do luxuoso espumante Moët & Chandon Rosé (200ml), ornamentada com cordão rústico e uma refinada tag em aquarela.',
+    items: ['Mini Espumante Moët & Chandon Rosé 200ml', 'Cordão rústico', 'Tag em aquarela personalizada'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.07 (4).jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Premium']
+  },
+  {
+    id: 'joia-doce',
+    name: 'Joia Doce de Cristal',
+    price: 23.10,
+    description: 'Uma formosa bomboniere de cristal sintético, abrigando pequenos suspiros florais (ou mini sabonetes). Fechada com uma esvoaçante fita de organza lilás e medalha dourada.',
+    items: ['Bomboniere de cristal sintético', 'Suspiros ou mini sabonetes', 'Fita de organza e medalha'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.07 (5).jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Doces']
+  },
+  {
+    id: 'toque-de-provenca',
+    name: 'Toque de Provença',
+    price: 10.73,
+    description: 'Com uma estética que remete aos campos da França, esta suculenta vem elegantemente vestida de juta. O destaque é o esplêndido laço de gorgurão lilás coroado por delicadas mini flores.',
+    items: ['Muda de suculenta', 'Revestimento de juta', 'Laço de gorgurão lilás com mini flores'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.07.jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Planta']
+  },
+  {
+    id: 'sementes-do-amanha',
+    name: 'Sementes do Amanhã',
+    price: 7.43,
+    description: 'Um poético frasco de vidro estilo botica, arrolhado com cortiça rústica e contendo grãos de sagu aromatizados (ou sementes florais). Adornado com barbante e micro-rosas artesanais.',
+    items: ['Frasco de vidro de botica com cortiça', 'Grãos de sagu aromatizados ou sementes', 'Barbante e micro-rosas'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.08 (1).jpeg',
+    tags: ['Casamento', 'Lembrancinhas']
+  },
+  {
+    id: 'cafe-e-amor',
+    name: 'Café e Amor',
+    price: 36.30,
+    description: 'Com um apelo afetivo e nostálgico, esta caneca esmaltada branca traz a clássica borda preta vintage. Personalizada elegantemente com as iniciais do casal. Uma lembrança útil e duradoura.',
+    items: ['Caneca esmaltada personalizada com iniciais'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.08 (2).jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Útil']
+  },
+  {
+    id: 'essencia-romantique',
+    name: 'Essência Romantique',
+    price: 9.08,
+    description: 'O aroma do grande dia eternizado em um elegante mini difusor. Conta com tampa dourada, varetas de madeira e vem delicadamente embalado em saquinho com um laço em fita verde musgo.',
+    items: ['Mini difusor de ambiente', 'Tampa dourada e varetas', 'Saquinho com laço verde musgo'],
+    image: '/images/WhatsApp Image 2026-10-02 at 17.02.15.jpeg',
+    tags: ['Casamento', 'Lembrancinhas', 'Aroma']
+  },
+  {
     id: 'doce-aconchego',
     name: 'Doce Aconchego',
     price: 28.00,

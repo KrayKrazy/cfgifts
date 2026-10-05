@@ -187,5 +187,18 @@ export const giftProducts: GiftProduct[] = [
     ],
     image: '/images/kit-amor-elegancia.jpeg',
     tags: ['O Boticário', 'Acessórios']
+  },
+  {
+    id: 'doce-aconchego',
+    name: 'Doce Aconchego',
+    price: 28.00,
+    description: 'Um presente delicado e afetuoso para adoçar o dia de alguém especial.',
+    items: [
+      '01 Mini copo metálico esmaltado',
+      '01 Saquinho de suspiros artesanais',
+      '🎀 Embalagem especial com muito carinho'
+    ],
+    image: '/images/suspiros_de_amor.jpg',
+    tags: ['Afetivo', 'Doces']
   }
 ];

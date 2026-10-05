@@ -7,6 +7,7 @@ import { giftProducts, GiftProduct, basketTypes, individualItems, BasketType, In
 
 export default function Home() {
   const [activeProduct, setActiveProduct] = useState<GiftProduct | null>(null);
+  const [activeTab, setActiveTab] = useState<'cestas' | 'lembrancinhas'>('cestas');
   
   // Custom Basket States
   const [isBuildingCustom, setIsBuildingCustom] = useState(false);
@@ -68,16 +69,31 @@ export default function Home() {
         <CommerceHero onBuildCustom={() => setIsBuildingCustom(true)} />
       </div>
 
-      {/* CATALOGO - COLEÇÕES PRONTAS */}
+      {/* CATALOGO - COLEÇÕES PRONTAS E LEMBRANCINHAS */}
       <main id="catalogo" className="max-w-7xl mx-auto px-6 pt-20">
-        <div className="flex flex-col items-center mb-16 text-center animate-fadeIn">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-slate-900">Coleções Afetivas</h2>
-          <p className="text-slate-500 mt-2">Kits criados com muito carinho e harmonia de produtos.</p>
-          <div className="w-16 h-1 bg-rose-300 mt-6 rounded-full"></div>
+        <div className="flex flex-col items-center mb-10 text-center animate-fadeIn">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-slate-900">Nossas Criações</h2>
+          <p className="text-slate-500 mt-2">Escolha a categoria ideal para a sua ocasião especial.</p>
+        </div>
+
+        {/* TABS */}
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+          <button 
+            onClick={() => setActiveTab('cestas')}
+            className={`px-8 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${activeTab === 'cestas' ? 'bg-rose-600 text-white shadow-lg' : 'bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-100'}`}
+          >
+            Coleções & Cestas
+          </button>
+          <button 
+            onClick={() => setActiveTab('lembrancinhas')}
+            className={`px-8 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all ${activeTab === 'lembrancinhas' ? 'bg-rose-600 text-white shadow-lg' : 'bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-100'}`}
+          >
+            Lembrancinhas de Casamento
+          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-          {giftProducts.map((p, i) => (
+          {giftProducts.filter(p => activeTab === 'cestas' ? !p.tags.includes('Casamento') : p.tags.includes('Casamento')).map((p, i) => (
             <div key={p.id} className="group cursor-pointer flex flex-col animate-slideUp" style={{ animationDelay: `${i * 50}ms` }} onClick={() => openProduct(p)}>
               <div className="relative w-full aspect-[4/5] bg-rose-50 mb-6 overflow-hidden rounded-2xl shadow-sm border border-rose-100/50">
                 <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out" />

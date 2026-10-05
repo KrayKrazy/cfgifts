@@ -199,6 +199,6 @@ export const giftProducts: GiftProduct[] = [
       '🎀 Embalagem especial com muito carinho'
     ],
     image: '/images/suspiros_de_amor.jpg',
-    tags: ['Afetivo', 'Doces']
+    tags: ['Afetivo', 'Doces', 'Casamento']
   }
 ];

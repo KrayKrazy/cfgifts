@@ -1,4 +1,4 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 export async function POST(req: Request) {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     const caktoPayload: any = {
       paymentMethod: paymentMethod,
       customer: { name, email, phone, docType: (docNumber || "").length > 14 ? "cnpj" : "cpf", docNumber: (docNumber || "").replace(/\D/g, "") },
-      items: items.map((item: any) => ({ offerId: item.offerId || "offer_default_123", quantity: 1, customPrice: Math.round(item.price * 100), description: item.name })),
+      items: items.map((item: any) => ({ offerId: item.offerId || "offer_default_123", quantity: 1 })),
       metadata: { orderId: order.id }
     };
     if (paymentMethod === "pix") { caktoPayload.pixExpiresIn = 3600; } 
